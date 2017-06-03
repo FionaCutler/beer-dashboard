@@ -5,7 +5,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { Beers } from '../api/beers.js';
 
 import BeerForm from './beerform.jsx';
-import BeerList  from './beerlist.jsx'
+import BeerList  from './beerlist.jsx';
+import BarChart from './barchart.jsx';
 
 class App extends Component{
     render(){
@@ -27,6 +28,7 @@ class App extends Component{
                     </div>
 
                     <div className="col-md-offset-2 col-md-6">
+                        <BarChart data={this.mapData()} width="480" height="320" />
                     </div>
                 </div>
             </div>
@@ -42,9 +44,11 @@ class App extends Component{
             { qty: 0, xLabel: "Fri" },
             { qty: 0, xLabel: "Sat" },
         ];
-        return this.props.beers.map((d)=>{
-            return data[moment(d.date).weekday()].qty += d.beers;
+        this.props.beers.forEach((d)=>{
+            let weekday = moment(d.date).weekday();
+            data[weekday].qty += d.beers;
         });
+        return data;
     }
 }
 
